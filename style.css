@@ -1,0 +1,118 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap');
+
+:root {
+    --primary-orange: #ff9d00;
+    --bg-dark: #0b0c10;
+    --text-light: #c5c6c7;
+    --accent-blue: #45a29e;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-light);
+    font-family: 'Roboto', sans-serif;
+    line-height: 1.6;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 50px;
+    border-bottom: 1px solid rgba(255, 157, 0, 0.2);
+    background: rgba(11, 12, 16, 0.95);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.logo img {
+    height: 50px;
+    vertical-align: middle;
+}
+
+.logo span {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.5rem;
+    color: var(--primary-orange);
+    margin-left: 10px;
+    font-weight: bold;
+    vertical-align: middle;
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+}
+
+nav ul li {
+    margin-left: 30px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: var(--text-light);
+    font-size: 1rem;
+    font-weight: 500;
+    transition: color 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+nav ul li a:hover {
+    color: var(--primary-orange);
+}
+
+.btn-dashboard {
+    border: 1px solid var(--primary-orange);
+    padding: 10px 20px;
+    border-radius: 4px;
+    color: var(--primary-orange) !important;
+}
+
+.btn-dashboard:hover {
+    background-color: var(--primary-orange);
+    color: #000 !important;
+    box-shadow: 0 0 15px var(--primary-orange);
+}
+
+.hero {
+    height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: radial-gradient(circle at center, #1f2833 0%, #0b0c10 70%);
+}
+
+.hero-content h1 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 4rem;
+    color: #fff;
+    margin-bottom: 20px;
+}
+
+.hero-content p {
+    font-size: 1.2rem;
+    max-width: 600px;
+    margin: 0 auto 40px auto;
+    color: #8892b0;
+}
+
+.section {
+    padding: 80px 50px;
+    border-top: 1px solid #1f2833;
+}
+
+.section h2 {
+    font-family: 'Orbitron', sans-serif;
+    color: var(--primary-orange);
+    margin-bottom: 30px;
+    font-size: 2rem;
+}

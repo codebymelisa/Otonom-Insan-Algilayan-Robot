@@ -1,0 +1,14 @@
+{
+    "robot_id": "ROBOT_001",
+    "on_mesafe": 121,
+    "sag_mesafe": 67,
+    "sol_mesafe": 121,
+    "durum": "radar_modu",
+    "egim_x": 0,
+    "egim_y": -5.8,
+    "egim_z": 0,
+    "alarm_durumu": false,
+    "zaman": "2025-11-22 10:08:16",
+    "timestamp": 1763806096,
+    "aktif_komut": "START"
+}

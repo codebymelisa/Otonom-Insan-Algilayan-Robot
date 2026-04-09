@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WALL-E Projesi</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Roboto:wght@300;400&display=swap" rel="stylesheet">
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js"></script>
+    <style>
+        body {
+            background-color: #0b0c10; overflow-x: hidden; font-family: 'Roboto', sans-serif; color: #fff;
+        }
+
+        header {
+            display: flex; justify-content: space-between; align-items: center; padding: 20px 50px;
+            background: rgba(11, 12, 16, 0.8); backdrop-filter: blur(5px); position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid rgba(255, 157, 0, 0.1);
+        }
+        .logo-link { 
+            text-decoration: none; 
+            display: flex; 
+            align-items: center; 
+            transition: transform 0.2s; 
+        }
+        .logo-link:active { 
+            transform: scale(0.95); 
+        }
+        .logo img { 
+            height: 85px; 
+            margin-right: 15px; 
+        }
+        .logo span { 
+            color: #ffc107; 
+            font-family: 'Orbitron', sans-serif; 
+            font-size: 1.5rem; font-weight: bold; 
+        }
+        nav ul { 
+            display: flex; 
+            list-style: none; 
+            align-items: center; 
+        }
+        nav ul li { 
+            margin-left: 30px; 
+        }
+        nav ul li a { 
+            text-decoration: none; 
+            color: #fff; font-size: 1.1rem; 
+            transition: all 0.3s ease;
+        }
+        nav ul li a:hover { 
+            color: #ffc107; 
+            text-shadow: 0 0 15px rgba(255, 193, 7, 0.8); 
+        }
+        .btn-dashboard { 
+            border: 1px solid #ff9d00; 
+            padding: 10px 25px; 
+            border-radius: 5px; 
+            color: #ff9d00 !important; 
+            font-weight: bold; transition: all 0.3s ease; 
+        }
+        .btn-dashboard:hover { 
+            background-color: rgba(255, 157, 0, 0.1); 
+            color: #fff !important; 
+            box-shadow: 0 0 20px rgba(255, 157, 0, 0.6); 
+            border-color: #fff; 
+        }
+        
+        #robot-fixed-container { 
+            position: fixed; 
+            top: 0; left: 0; 
+            width: 100%; 
+            height: 100vh; 
+            z-index: -1; 
+            pointer-events: none; 
+            transition: transform 0.1s ease-out; 
+        }
+        model-viewer { 
+            width: 100%; 
+            height: 100%; --poster-color: transparent; 
+            outline: none; 
+            transition: all 0.8s ease;
+        }
+        
+        .section { 
+            min-height: 100vh; 
+            display: flex; 
+            align-items: center; 
+            padding: 0 5%; 
+            background: transparent !important; 
+            position: relative; 
+            flex-direction: row; 
+        }
+        .content-area { 
+            max-width: 500px; 
+            z-index: 10; 
+            transition: opacity 0.5s ease; 
+        }
+        
+        h1 { 
+            font-family: 'Orbitron', sans-serif; 
+            font-size: 4.8rem; 
+            font-weight: 900; 
+            line-height: 1.1; 
+            margin-bottom: 20px; 
+            color: #ffc107; 
+            text-shadow: 3px 3px 0px #000, 0 0 25px rgba(255, 193, 7, 0.7); 
+        }
+        .normal-text p { 
+            font-size: 1.4rem; 
+            line-height: 1.6; 
+            color: #e0e0e0; 
+            text-shadow: 1px 1px 2px #000; 
+        }
+        .normal-text h2 { 
+            font-family: 'Orbitron', sans-serif; 
+            font-size: 3.2rem; 
+            color: #ff9d00; 
+            margin-bottom: 20px; 
+            text-transform: uppercase; 
+            text-shadow: 2px 2px 0px #000, 0 0 15px rgba(255, 157, 0, 0.5); 
+        }
+        
+        .hero { 
+            justify-content: flex-start !important; 
+            text-align: left !important; 
+        }
+
+        #parcalar { 
+            justify-content: flex-end !important; 
+            text-align: right !important; 
+        }
+        #proje_hakkinda .content-area { 
+            opacity: 0; 
+            pointer-events: none; 
+        }
+        #parcalar .content-area { 
+            opacity: 0; 
+            pointer-events: none; 
+        }
+
+        @media (max-width: 768px) { 
+            h1 { font-size: 3rem; } .section { padding: 0 20px; justify-content: center !important; text-align: center !important; } .content-area { max-width: 100%; } 
+        }
+
+        /* HOLOGRAM */
+        #hologram-container { position: absolute; top: 18%; left: 55%; opacity: 0; transform: scale(0.5) translate(-50px, 50px) rotate(-10deg); transform-origin: left bottom; transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1); pointer-events: auto; z-index: 100; }
+        #hologram-container.active { opacity: 1; transform: scale(1.2) translate(0, 0) rotate(0deg); }
+        .hologram-cone { width: 0; height: 0; border-top: 150px solid transparent; border-bottom: 150px solid transparent; border-right: 400px solid rgba(0, 243, 255, 0.15); position: absolute; left: 0; top: 50%; transform: translateY(-50%); filter: blur(10px); }
+        .hologram-box { margin-left: 380px; background: rgba(0, 20, 40, 0.8); border: 2px solid #00f3ff; padding: 25px; border-radius: 5px; box-shadow: 0 0 30px rgba(0, 243, 255, 0.3), inset 0 0 20px rgba(0, 243, 255, 0.1); position: relative; backdrop-filter: blur(5px); font-family: 'Share Tech Mono', monospace; color: #00f3ff; max-width: 400px; transform: perspective(1000px) rotateY(-10deg); }
+        .hologram-box::before { content: " "; display: block; position: absolute; top: 0; left: 0; bottom: 0; right: 0; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06)); z-index: 2; background-size: 100% 2px, 3px 100%; pointer-events: none; border-radius: 5px; }
+        .hologram-box h2 { font-family: 'Orbitron', sans-serif; font-size: 2rem; color: #fff; margin-bottom: 15px; text-shadow: 0 0 10px #00f3ff; border-bottom: 1px dashed #00f3ff; padding-bottom: 10px; }
+        .hologram-box p { font-size: 1.1rem; line-height: 1.5; color: #aeeeff; text-shadow: 0 0 5px rgba(0, 243, 255, 0.5); }
+
+        /* --- BLUEPRINT --- */
+        
+        #blueprint-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; opacity: 0; transition: opacity 0.8s ease;
+        }
+        #blueprint-overlay.active { opacity: 1; }
+
+        .tech-label {
+            position: absolute;
+            background: rgba(11, 12, 16, 0.9);
+            color: #fff;
+            padding: 10px 15px; 
+            border-radius: 4px;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 1rem; 
+            font-weight: bold;
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+            display: flex; align-items: center;
+        }
+        
+        .tech-label span { 
+            color: #ff9d00; 
+            margin-right: 10px; 
+            border-right: 1px solid #555; 
+            padding-right: 10px; 
+        }
+
+        .tech-label::after {
+            content: '';
+            position: absolute;
+            height: 2px; 
+            background: #ff9d00;
+            top: 50%; 
+            transform: translateY(-50%);
+        }
+
+        .lbl-cam { top: 25%; left: 5%; border-left: 3px solid #ff9d00; }
+        .lbl-cam::after {
+            left: 100%; width: 80px;
+            transform-origin: left center; transform: rotate(15deg);
+        }
+
+        .lbl-sensor { top: 45%; left: 5%; border-left: 3px solid #ff9d00; }
+        .lbl-sensor::after {
+            left: 100%; width: 190px;
+            transform-origin: left center; transform: rotate(-5deg);
+        }
+
+        .lbl-ant { 
+            top: 57%;   
+            left: 5%;  
+            flex-direction: row; 
+            border-right: none; 
+            border-left: 3px solid #ff9d00; 
+        }
+
+        .lbl-ant span { 
+            margin-left: 0; 
+            margin-right: 10px; 
+            border-left: none; 
+            border-right: 1px solid #555; 
+            padding-left: 0; 
+            padding-right: 10px;
+        }
+
+        .lbl-ant::after {
+            left: 100%; 
+            right: auto;
+            width: 430px; 
+            transform-origin: left center; 
+            transform: rotate(-10deg);
+        }
+        .lbl-ivme { 
+            top: 77%;   
+            left: 5%;  
+            flex-direction: row; 
+            border-right: none; 
+            border-left: 3px solid #ff9d00; 
+        }
+
+        .lbl-ant ivme { 
+            margin-left: 0; 
+            margin-right: 10px; 
+            border-left: none; 
+            border-right: 1px solid #555; 
+            padding-left: 0; 
+            padding-right: 10px;
+        }
+
+        .lbl-ivme::after {
+            left: 100%; 
+            right: auto;
+            width: 350px; 
+            transform-origin: left center; 
+            transform: rotate(-10deg);
+        }
+
+        .lbl-pil { 
+            top: 20%; 
+            right: 8%; 
+            flex-direction: row-reverse; border-right: 3px solid #ff9d00; 
+        }
+        .lbl-pil span { 
+            margin-right: 0; 
+            margin-left: 10px; 
+            border-right: none; 
+            border-left: 1px solid #555; 
+            padding-right: 0; 
+            padding-left: 10px;
+        }
+        
+        .lbl-pil::after {
+            right: 100%; 
+            width: 300px; 
+            transform-origin: right center; 
+            transform: rotate(-10deg); 
+        }
+
+          .lbl-motor_surucu { 
+            top: 60%; 
+            right: 8%; 
+            flex-direction: row-reverse; border-right: 3px solid #ff9d00; 
+        }
+        .lbl-motor_surucu span { 
+            margin-right: 0; 
+            margin-left: 5px; 
+            border-right: none; 
+            border-left: 1px solid #555; 
+            padding-right: 0; 
+            padding-left: 10px;
+        }
+        
+        .lbl-motor_surucu::after {
+            right: 100%; 
+            width: 50px; 
+            transform-origin: right center; 
+            transform: rotate(-25deg); 
+        }
+        footer {
+            background: #050608;
+            padding: 50px 5%;
+            margin-top: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: -10; 
+        }
+
+        .footer-content {
+            display: flex;
+            gap: 100px;
+            width: 100%;
+        }
+
+        .team-section h3, .project-info h3 {
+            font-family: 'Orbitron', sans-serif;
+            color: #ff9d00;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .team-list p {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 1.1rem;
+            color: #8892b0;
+            margin-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 5px;
+            width: 300px;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .team-list span { color: #fff; }
+
+        .copyright {
+            position: absolute;
+            bottom: 10px;
+            right: 20px;
+            font-size: 0.8rem;
+            color: #444;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo"><a href="index.html" class="logo-link"><img src="logo.png" alt="Logo"><span>WALL-E PROJECT</span></a></div>
+        <nav><ul><li><a href="#proje_hakkinda">Projemiz Hakkında</a></li><li><a href="#parcalar">Parçalar</a></li><li><a href="#ekibimiz">Ekibimiz</a></li><li><a href="robot_dashboard.php" class="btn-dashboard">WALL-E KOMUTA MERKEZİ</a></li></ul></nav>
+    </header>
+
+    <div id="robot-fixed-container">
+        <model-viewer id="main-robot" src="proje.glb" alt="Wall-E Tasarımı" shadow-intensity="1" exposure="0.5" tone-mapping="neutral" camera-orbit="-90deg 75deg 105%" autoplay disable-zoom style="background-color: transparent;"></model-viewer>
+
+        <div id="hologram-container">
+            <div class="hologram-cone"></div>
+            <div class="hologram-box">
+                <h2>PROJE HAKKINDA</h2>
+                <p>İnsan hayatını riske atmadan zorlu bölgelere girebilen, anlık görüntü aktaran ve analiz yapan robotumuz. <br><br> [SYSTEM STATUS: ONLINE]</p>
+            </div>
+        </div>
+
+        <div id="blueprint-overlay">
+            
+            <div class="tech-label lbl-cam"><span>GÖRÜNTÜLEME</span>ESP32-CAM (İÇ KISIMDA) + OV2640</div>
+            <div class="tech-label lbl-sensor"><span>MESAFE ALGILAMA</span>HC-SR04 SENSÖR</div>
+            <div class="tech-label lbl-ant"><span>İLETİŞİM</span>REGÜLATÖR</div>
+            <div class="tech-label lbl-ivme"><span>YÖN KONTROL</span>İVME (İÇ KISIMDA)</div>
+            <div class="tech-label lbl-pil"><span>GÜÇ</span>PALET & PİLLER </div>
+            <div class="tech-label lbl-motor_surucu"><span>HAREKET SİSTEMİ</span>MOTOR SÜRÜCÜ (İÇ KISIMDA)</div>
+            
+
+        </div>
+    </div>
+
+    <section class="section hero"><div class="content-area normal-text"><h1>GELECEĞİ<br>TASARLIYORUZ</h1><p>Sınırları aşan otonom teknolojiler ve yapay zeka destekli arama kurtarma robotu.</p></div></section>
+    <section id="proje_hakkinda" class="section"><div class="content-area"></div></section>
+    <section id="parcalar" class="section"><div class="content-area normal-text"></div></section>
+    
+    <section class="section" style="height: 20vh;"></section>
+
+
+    <footer id="ekibimiz">
+        <div class="footer-content">
+            
+            <div class="team-section">
+                <h3>PROJE EKİBİ</h3>
+                <div class="team-list">
+                    <p>MUHAMMED ENES BARIŞ <span>No:90240000502</span></p>
+                    <p>RONİ KILIÇ <span>No: 90240000243</span></p>
+                    <p>ECE BULUT <span>No: 90240000267</span></p>
+                    <p>FATMA ECREN AYKUT  <span>No:90240000218</span></p>
+                    <p>MELİSA GÜNEY <span>No: 90240000259</span></p>
+                </div>
+            </div>
+
+        </div>
+        <div class="copyright">© 2025 WALL-E Project</div>
+    </footer>
+
+
+    <script>
+        const robotContainer = document.getElementById('robot-fixed-container');
+        const modelViewer = document.getElementById('main-robot');
+        const hologram = document.getElementById('hologram-container');
+        const blueprint = document.getElementById('blueprint-overlay');
+
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            const windowHeight = window.innerHeight;
+            
+            let translateX = 0;
+            let finalRotate = -90;
+            let verticalAngle = 75;
+
+            if ((window.innerHeight + scrollY) >= document.body.offsetHeight - 100) {
+                
+                translateX = 350; 
+                finalRotate = -45; 
+                verticalAngle = 75;
+                blueprint.classList.remove('active');
+
+            } 
+            else {
+                const swingSpeed = 0.0025; 
+                const swingDistance = 450; 
+                translateX = (Math.cos(scrollY * swingSpeed) * swingDistance);
+                //YÖN HAREKETİ
+                const rotationBalance = Math.sin(scrollY * swingSpeed) * 90; 
+                finalRotate = -90 - rotationBalance;
+
+                if (scrollY > windowHeight * 1.6) {
+                    verticalAngle = 38.5; 
+                    blueprint.classList.add('active'); 
+                } else {
+                    verticalAngle = 75; 
+                    blueprint.classList.remove('active'); 
+                }
+
+                if (scrollY > windowHeight * 0.8 && scrollY < windowHeight * 1.6) {
+                    hologram.classList.add('active');
+                } else {
+                    hologram.classList.remove('active');
+                }
+            }
+            //DÖNÜŞ HAREKETİ
+            robotContainer.style.transform = `translateX(${translateX}px)`;
+            modelViewer.cameraOrbit = `${finalRotate}deg ${verticalAngle}deg 105%`;
+        });
+    </script>
+
+</body>
+</html>
